@@ -6,4 +6,4 @@ import { AnimeController } from './anime.controller';
   controllers: [AnimeController],
   providers: [AnimeService],
 })
-export class AnimeModule {}
+export class AnimeModule { }

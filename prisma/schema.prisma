@@ -12,3 +12,107 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Gender {
+  UNKOWN
+  USER
+  ADMIN
+}
+
+enum EpisodeType {
+  EPISODE
+  OVA
+  ONA
+}
+
+model Admin {
+  id        Int       @id @default(autoincrement())
+  username  String    @unique @db.VarChar(150)
+  name      String    @db.VarChar(150)
+  email     String    @unique @db.VarChar(325)
+  password  String    @db.Text
+  gender    Gender    @default(UNKOWN)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  Anime     Anime[]
+}
+
+model Users {
+  id              Int       @id @default(autoincrement())
+  username        String    @unique @db.VarChar(150)
+  name            String?   @db.VarChar(150)
+  email           String    @unique @db.VarChar(325)
+  password        String    @db.Text
+  gender          Gender    @default(UNKOWN)
+  profile_picture String?   @db.Text
+  profile_banner  String?   @db.Text
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime?
+}
+
+model Studio {
+  id        Int     @id @default(autoincrement())
+  name      String
+  isDeleted Boolean @default(false)
+  Anime     Anime[]
+}
+
+model Genre {
+  id         Int          @id @default(autoincrement()) @db.SmallInt
+  name       String
+  isDeleted  Boolean      @default(false)
+  AnimeGenre AnimeGenre[]
+}
+
+model AnimeStatus {
+  id        Int     @id @default(autoincrement()) @db.SmallInt
+  name      String
+  isDeleted Boolean @default(false)
+  Anime     Anime[]
+}
+
+model Category {
+  id        Int     @id @default(autoincrement()) @db.SmallInt
+  name      String
+  isDeleted Boolean @default(false)
+  Anime     Anime[]
+}
+
+model Anime {
+  id             Int          @id @default(autoincrement())
+  title          String       @db.VarChar(512)
+  alternateTitle String?      @db.VarChar(512)
+  slug           String       @unique @db.VarChar(512)
+  synopsis       String?      @db.VarChar(512)
+  poster         String?      @db.Text
+  releaseDate    String?
+  totalEpisode   Int?         @default(1)
+  statusId       Int          @db.SmallInt
+  status         AnimeStatus  @relation(fields: [statusId], references: [id])
+  categoryId     Int          @db.SmallInt
+  category       Category     @relation(fields: [categoryId], references: [id])
+  createdById    Int
+  studio         Studio       @relation(fields: [studioId], references: [id])
+  studioId       Int
+  createdBy      Admin        @relation(fields: [createdById], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime?
+  deletedAt      DateTime?
+  AnimeGenre     AnimeGenre[]
+}
+
+model AnimeGenre {
+  animeId Int
+  anime   Anime @relation(fields: [animeId], references: [id])
+  genreId Int   @db.SmallInt
+  genre   Genre @relation(fields: [genreId], references: [id])
+
+  @@unique([animeId, genreId])
+}
+
+model AnimeEpisode {
+  id            Int         @id @default(autoincrement())
+  episodeType   EpisodeType
+  episodeNumber Int         @db.SmallInt
+  createdAt     DateTime    @default(now())
+}

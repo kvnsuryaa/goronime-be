@@ -1,15 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, ValidationPipe, UseGuards, Req } from '@nestjs/common';
 import { AnimeService } from './anime.service';
 import { CreateAnimeDto } from './dto/create-anime.dto';
 import { UpdateAnimeDto } from './dto/update-anime.dto';
+import { Prisma, Users } from '@prisma/client'
+import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
+import { User } from 'src/decorators/user.decorator';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('anime')
 export class AnimeController {
-  constructor(private readonly animeService: AnimeService) {}
+  constructor(private readonly animeService: AnimeService) { }
 
   @Post()
-  create(@Body() createAnimeDto: CreateAnimeDto) {
-    return this.animeService.create(createAnimeDto);
+  create(@User() user: Users, @Body() createAnimeDto: CreateAnimeDto) {
+    return this.animeService.create(createAnimeDto, user);
   }
 
   @Get()
@@ -23,12 +28,12 @@ export class AnimeController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAnimeDto: UpdateAnimeDto) {
+  update(@Param('id', ParseIntPipe) id: string, @Body(ValidationPipe) updateAnimeDto: UpdateAnimeDto) {
     return this.animeService.update(+id, updateAnimeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.animeService.remove(+id);
   }
 }
