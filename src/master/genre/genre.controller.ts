@@ -21,18 +21,18 @@ export class GenreController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.genreService.findOne(+id);
+    return this.genreService.findOne(id);
   }
 
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'))
   update(@Param('id') id: string, @Body() updateGenreDto: UpdateGenreDto) {
-    return this.genreService.update(+id, updateGenreDto);
+    return this.genreService.update(id, updateGenreDto);
   }
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
   remove(@Param('id') id: string) {
-    return this.genreService.remove(+id);
+    return this.genreService.remove(id);
   }
 }

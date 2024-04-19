@@ -27,7 +27,7 @@ export class GenreService {
     return genres
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const genre = await this.prisma.genre.findFirst({
       where: {
         id: id,
@@ -42,7 +42,7 @@ export class GenreService {
     return genre
   }
 
-  async update(id: number, updateGenreDto: UpdateGenreDto) {
+  async update(id: string, updateGenreDto: UpdateGenreDto) {
     const genre = await this.prisma.genre.update({
       where: {
         id: id,
@@ -56,7 +56,7 @@ export class GenreService {
     return genre
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     await this.prisma.genre.update({
       where: {
         id: id,

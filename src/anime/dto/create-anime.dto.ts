@@ -1,4 +1,5 @@
-import { IsDateString, IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator'
+import { ArrayMinSize, IsArray, IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { AnimeStatus } from "@prisma/client";
 
 export class CreateAnimeDto {
     @IsString()
@@ -6,32 +7,38 @@ export class CreateAnimeDto {
     title: string;
 
     @IsString()
-    alternateTitle: string;
+    alternateTitle?: string;
 
     @IsString()
     @IsNotEmpty()
     slug: string;
 
     @IsString()
-    synopsis: string;
+    synopsis?: string;
 
     @IsString()
-    poster: string;
+    poster?: string;
 
     @IsString()
-    @IsDateString()
-    releaseDate: string;
+    @IsOptional()
+    releaseDate?: string;
 
     @IsNumber()
     @IsOptional()
     totalEpisode?: number;
 
-    @IsNumber()
-    statusId: number;
+    @IsEnum(AnimeStatus)
+    statusAnime: AnimeStatus;
 
-    @IsNumber()
-    categoryId: number;
+    @IsString()
+    @IsUUID()
+    categoryId: string;
 
-    @IsNumber()
-    studioId: number;
+    @IsString()
+    @IsUUID()
+    studioId: string;
+
+    @IsArray()
+    @IsString({ each: true })
+    genres?: string[];
 }

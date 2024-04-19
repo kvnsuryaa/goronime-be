@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, ValidationPipe, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, ValidationPipe, UseGuards, Req, Query } from '@nestjs/common';
 import { AnimeService } from './anime.service';
 import { CreateAnimeDto } from './dto/create-anime.dto';
 import { UpdateAnimeDto } from './dto/update-anime.dto';
@@ -18,22 +18,22 @@ export class AnimeController {
   }
 
   @Get()
-  findAll() {
-    return this.animeService.findAll();
+  findAll(@Query() query) {
+    return this.animeService.findAll(query);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.animeService.findOne(+id);
+  @Get(':slug')
+  findOne(@Param('slug') slug: string) {
+    return this.animeService.findOne(slug);
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: string, @Body(ValidationPipe) updateAnimeDto: UpdateAnimeDto) {
-    return this.animeService.update(+id, updateAnimeDto);
+  update(@Param('id') id: string, @Body(ValidationPipe) updateAnimeDto: UpdateAnimeDto) {
+    return this.animeService.update(id, updateAnimeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: string) {
-    return this.animeService.remove(+id);
+  remove(@Param('id') id: string) {
+    return this.animeService.remove(id);
   }
 }

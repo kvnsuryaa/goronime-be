@@ -25,8 +25,14 @@ enum EpisodeType {
   ONA
 }
 
+enum AnimeStatus {
+  ONGOING
+  FINISHED
+  COMINGSOON
+}
+
 model Admin {
-  id        Int       @id @default(autoincrement())
+  id        String    @id @default(uuid())
   username  String    @unique @db.VarChar(150)
   name      String    @db.VarChar(150)
   email     String    @unique @db.VarChar(325)
@@ -34,11 +40,10 @@ model Admin {
   gender    Gender    @default(UNKOWN)
   createdAt DateTime  @default(now())
   updatedAt DateTime?
-  Anime     Anime[]
 }
 
 model Users {
-  id              Int       @id @default(autoincrement())
+  id              String    @id @default(uuid())
   username        String    @unique @db.VarChar(150)
   name            String?   @db.VarChar(150)
   email           String    @unique @db.VarChar(325)
@@ -48,70 +53,64 @@ model Users {
   profile_banner  String?   @db.Text
   createdAt       DateTime  @default(now())
   updatedAt       DateTime?
+  Anime           Anime[]
 }
 
 model Studio {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(uuid())
   name      String
   isDeleted Boolean @default(false)
   Anime     Anime[]
 }
 
 model Genre {
-  id         Int          @id @default(autoincrement()) @db.SmallInt
+  id         String       @id @default(uuid())
   name       String
   isDeleted  Boolean      @default(false)
   AnimeGenre AnimeGenre[]
 }
 
-model AnimeStatus {
-  id        Int     @id @default(autoincrement()) @db.SmallInt
-  name      String
-  isDeleted Boolean @default(false)
-  Anime     Anime[]
-}
-
 model Category {
-  id        Int     @id @default(autoincrement()) @db.SmallInt
+  id        String  @id @default(uuid())
   name      String
   isDeleted Boolean @default(false)
   Anime     Anime[]
 }
 
 model Anime {
-  id             Int          @id @default(autoincrement())
+  id             String       @id @default(uuid())
   title          String       @db.VarChar(512)
   alternateTitle String?      @db.VarChar(512)
   slug           String       @unique @db.VarChar(512)
   synopsis       String?      @db.VarChar(512)
   poster         String?      @db.Text
   releaseDate    String?
-  totalEpisode   Int?         @default(1)
-  statusId       Int          @db.SmallInt
-  status         AnimeStatus  @relation(fields: [statusId], references: [id])
-  categoryId     Int          @db.SmallInt
+  totalEpisode   Int?         @default(0)
+  statusAnime    AnimeStatus
+  categoryId     String
   category       Category     @relation(fields: [categoryId], references: [id])
-  createdById    Int
+  studioId       String
   studio         Studio       @relation(fields: [studioId], references: [id])
-  studioId       Int
-  createdBy      Admin        @relation(fields: [createdById], references: [id])
+  createdById    String
+  createdBy      Users        @relation(fields: [createdById], references: [id])
   createdAt      DateTime     @default(now())
   updatedAt      DateTime?
+  isDeleted      Boolean      @default(false)
   deletedAt      DateTime?
-  AnimeGenre     AnimeGenre[]
+  animeGenre     AnimeGenre[]
 }
 
 model AnimeGenre {
-  animeId Int
-  anime   Anime @relation(fields: [animeId], references: [id])
-  genreId Int   @db.SmallInt
-  genre   Genre @relation(fields: [genreId], references: [id])
+  animeId String
+  anime   Anime  @relation(fields: [animeId], references: [id])
+  genreId String
+  genre   Genre  @relation(fields: [genreId], references: [id])
 
   @@unique([animeId, genreId])
 }
 
 model AnimeEpisode {
-  id            Int         @id @default(autoincrement())
+  id            String      @id @default(uuid())
   episodeType   EpisodeType
   episodeNumber Int         @db.SmallInt
   createdAt     DateTime    @default(now())

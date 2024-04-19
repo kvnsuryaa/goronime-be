@@ -27,7 +27,7 @@ export class StudioService {
     return studios
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const studio = await this.prisma.studio.findFirst({
       where: {
         id: id
@@ -41,7 +41,7 @@ export class StudioService {
     return studio
   }
 
-  async update(id: number, updateStudioDto: UpdateStudioDto) {
+  async update(id: string, updateStudioDto: UpdateStudioDto) {
     const studio = await this.prisma.studio.update({
       where: {
         id: id,
@@ -53,7 +53,7 @@ export class StudioService {
     })
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     await this.prisma.studio.update({
       where: {
         id: id,

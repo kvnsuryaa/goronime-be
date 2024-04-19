@@ -1,5 +1,5 @@
 export class ResponseUser {
-    id: number;
+    id: string;
     username: string;
     name: string;
     email: string;

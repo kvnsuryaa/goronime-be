@@ -15,7 +15,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, Response<T>> {
 		return next.handle().pipe(map(data => ({
 			statusCode: context.switchToHttp().getResponse().statusCode,
 			message: context.switchToHttp().getResponse().message || 'no message',
-			data: data,
+			data: data || null,
 			error: context.switchToHttp().getResponse().error || null,
 		})));
 	}

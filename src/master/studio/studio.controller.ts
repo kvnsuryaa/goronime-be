@@ -21,16 +21,16 @@ export class StudioController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.studioService.findOne(+id);
+    return this.studioService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateStudioDto: UpdateStudioDto) {
-    return this.studioService.update(+id, updateStudioDto);
+    return this.studioService.update(id, updateStudioDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.studioService.remove(+id);
+    return this.studioService.remove(id);
   }
 }
