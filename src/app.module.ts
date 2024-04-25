@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { StudioModule } from './master/studio/studio.module';
 import { GenreModule } from './master/genre/genre.module';
 import { CategoryModule } from './master/category/category.module';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { CategoryModule } from './master/category/category.module';
     ConfigModule.forRoot({
       isGlobal: true
     }),
-    CategoryModule
+    CategoryModule,
+    UploadsModule
   ],
   controllers: [],
   providers: [],

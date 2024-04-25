@@ -31,7 +31,6 @@ export class AnimeService {
       throw new NotFoundException('Category not found')
     }
 
-    console.log('user', user)
     const anime = await this.prisma.anime.create({
       data: {
         title: createAnimeDto.title,
@@ -114,7 +113,7 @@ export class AnimeService {
           }
         },
         animeGenre: {
-          include: {
+          select: {
             genre: true
           }
         }
