@@ -10,7 +10,7 @@ async function bootstrap() {
     whitelist: true
   }))
 
-  // const { httpAdapter } = app.get(HttpAdapterHost);
+  app.enableCors()
   app.useGlobalInterceptors(new ResponseInterceptor())
   app.useGlobalFilters(new PrismaClientExceptionFilter())
   await app.listen(3000);

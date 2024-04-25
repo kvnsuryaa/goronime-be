@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAnimeDto } from './dto/create-anime.dto';
 import { UpdateAnimeDto } from './dto/update-anime.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Prisma, Users } from '@prisma/client'
+import { AnimeStatus, Prisma, Users } from '@prisma/client'
 import { AnimeGenreDto } from './dto/anime-genre.dto';
 
 @Injectable()
@@ -195,5 +195,39 @@ export class AnimeService {
         isDeleted: true
       }
     })
+  }
+
+  async findRecentRelease(query: any) {
+    let { page, limit, status } = query
+    page = page || 1
+    limit = limit || 10
+    if (!AnimeStatus[status as keyof typeof AnimeStatus]) {
+      status = AnimeStatus.ONGOING
+    } else {
+      status = AnimeStatus[status as keyof typeof AnimeStatus]
+    }
+
+    const offset = page * limit - limit
+    const res = await this.prisma.$queryRaw`SELECT "Anime".*, "latestEpisodeNumber", "latestCreatedAt"
+    FROM "Anime"
+    INNER JOIN (
+        SELECT "animeId", MAX("episodeNumber") AS "latestEpisodeNumber", MAX("createdAt") AS "latestCreatedAt"
+        FROM "AnimeEpisode"
+        GROUP BY "animeId"
+    ) AS "latestEpisodes" ON "Anime".id = "latestEpisodes"."animeId" 
+    WHERE "statusAnime"::text = ${status}
+    ORDER BY "latestCreatedAt" DESC LIMIT ${limit} OFFSET ${offset};`
+
+    const data = await this.prisma.animeEpisode.findMany({
+      select: {
+        episodeNumber: true,
+        anime: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    return res
   }
 }
