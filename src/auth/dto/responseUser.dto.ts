@@ -1,5 +1,4 @@
 export class ResponseUser {
-    id: string;
     username: string;
     name: string;
     email: string;

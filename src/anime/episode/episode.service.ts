@@ -62,11 +62,16 @@ export class EpisodeService {
     return episodes
   }
 
-  async findOne(animeId: string, id: string) {
+  async findOne(animeId: string, id: number) {
     const episode = await this.prisma.animeEpisode.findFirst({
       where: {
-        animeId: animeId,
-        id: id
+        episodeNumber: id,
+        anime: {
+          slug: animeId
+        }
+      },
+      include: {
+        anime: true
       }
     })
 

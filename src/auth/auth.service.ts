@@ -45,7 +45,6 @@ export class AuthService {
         })
 
         const userDto: ResponseUser = {
-            id: user.id,
             email: user.email,
             username: user.username,
             name: user.name,
@@ -104,7 +103,6 @@ export class AuthService {
         })
 
         const userDto: ResponseUser = {
-            id: user.id,
             email: user.email,
             username: user.username,
             name: user.name,

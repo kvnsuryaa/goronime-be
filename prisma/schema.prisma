@@ -82,7 +82,7 @@ model Anime {
   title          String         @db.VarChar(512)
   alternateTitle String?        @db.VarChar(512)
   slug           String         @unique @db.VarChar(512)
-  synopsis       String?        @db.VarChar(512)
+  synopsis       String?        @db.VarChar(1020)
   poster         String?        @db.Text
   releaseDate    String?
   totalEpisode   Int?           @default(0)

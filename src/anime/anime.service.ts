@@ -81,6 +81,9 @@ export class AnimeService {
       take: 10,
       skip: offset,
       where: filter,
+      include: {
+        category: true,
+      }
     })
     const paginate = {
       total_page: Math.ceil(total_data / limit),
@@ -115,6 +118,15 @@ export class AnimeService {
         animeGenre: {
           select: {
             genre: true
+          }
+        },
+        AnimeEpisode: {
+          select: {
+            episodeNumber: true,
+            createdAt: true,
+          },
+          orderBy: {
+            episodeNumber: 'desc'
           }
         }
       },
@@ -208,13 +220,14 @@ export class AnimeService {
     }
 
     const offset = page * limit - limit
-    const res = await this.prisma.$queryRaw`SELECT "Anime".*, "latestEpisodeNumber", "latestCreatedAt"
+    const res = await this.prisma.$queryRaw`SELECT "Anime".*, "Category".name AS "categoryName", "latestEpisodeNumber", "latestCreatedAt"
     FROM "Anime"
     INNER JOIN (
         SELECT "animeId", MAX("episodeNumber") AS "latestEpisodeNumber", MAX("createdAt") AS "latestCreatedAt"
         FROM "AnimeEpisode"
         GROUP BY "animeId"
     ) AS "latestEpisodes" ON "Anime".id = "latestEpisodes"."animeId" 
+    INNER JOIN "Category" ON "Category".id = "Anime"."categoryId"
     WHERE "statusAnime"::text = ${status}
     ORDER BY "latestCreatedAt" DESC LIMIT ${limit} OFFSET ${offset};`
 

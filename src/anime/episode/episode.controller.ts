@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { EpisodeService } from './episode.service';
 import { CreateEpisodeDto } from './dto/create-episode.dto';
 import { UpdateEpisodeDto } from './dto/update-episode.dto';
@@ -18,8 +18,8 @@ export class EpisodeController {
   }
 
   @Get(':id')
-  findOne(@Param('anime') anime: string, @Param('id') id: string) {
-    return this.episodeService.findOne(anime, id);
+  findOne(@Param('anime') anime: string, @Param('id', new ParseIntPipe()) id: number) {
+    return this.episodeService.findOne(anime, +id);
   }
 
   @Delete(':id')
