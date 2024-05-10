@@ -40,6 +40,7 @@ export class AnimeService {
         poster: createAnimeDto.poster,
         releaseDate: createAnimeDto.releaseDate,
         statusAnime: createAnimeDto.statusAnime,
+        totalEpisode: createAnimeDto.totalEpisode,
         categoryId: category_anime.id,
         studioId: studio_anime.id,
         createdById: user.id,
@@ -169,6 +170,7 @@ export class AnimeService {
         poster: updateAnimeDto.poster,
         releaseDate: updateAnimeDto.releaseDate,
         statusAnime: updateAnimeDto.statusAnime,
+        totalEpisode: updateAnimeDto.totalEpisode,
         categoryId: category_anime.id,
         studioId: studio_anime.id,
       }
