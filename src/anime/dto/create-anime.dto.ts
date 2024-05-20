@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsArray, IsDateString, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator'
 import { AnimeStatus } from "@prisma/client";
 
 export class CreateAnimeDto {

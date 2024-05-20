@@ -25,6 +25,18 @@ enum EpisodeType {
   ONA
 }
 
+enum ScheduleType {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+  RANDOM
+  UPCOMING
+}
+
 enum AnimeStatus {
   ONGOING
   FINISHED
@@ -78,27 +90,28 @@ model Category {
 }
 
 model Anime {
-  id             String         @id @default(uuid())
-  title          String         @db.VarChar(512)
-  alternateTitle String?        @db.VarChar(512)
-  slug           String         @unique @db.VarChar(512)
-  synopsis       String?        @db.VarChar(1020)
-  poster         String?        @db.Text
+  id             String          @id @default(uuid())
+  title          String          @db.VarChar(512)
+  alternateTitle String?         @db.VarChar(512)
+  slug           String          @unique @db.VarChar(512)
+  synopsis       String?         @db.VarChar(1020)
+  poster         String?         @db.Text
   releaseDate    String?
-  totalEpisode   Int?           @default(0)
+  totalEpisode   Int?            @default(0)
   statusAnime    AnimeStatus
   categoryId     String
-  category       Category       @relation(fields: [categoryId], references: [id])
+  category       Category        @relation(fields: [categoryId], references: [id])
   studioId       String
-  studio         Studio         @relation(fields: [studioId], references: [id])
+  studio         Studio          @relation(fields: [studioId], references: [id])
   createdById    String
-  createdBy      Users          @relation(fields: [createdById], references: [id])
-  createdAt      DateTime       @default(now())
+  createdBy      Users           @relation(fields: [createdById], references: [id])
+  createdAt      DateTime        @default(now())
   updatedAt      DateTime?
-  isDeleted      Boolean        @default(false)
+  isDeleted      Boolean         @default(false)
   deletedAt      DateTime?
   animeGenre     AnimeGenre[]
   AnimeEpisode   AnimeEpisode[]
+  AnimeSchedule  AnimeSchedule[]
 }
 
 model AnimeGenre {
@@ -117,4 +130,13 @@ model AnimeEpisode {
   episodeNumber Int      @db.SmallInt
   episodeSource String?  @db.Text
   createdAt     DateTime @default(now())
+}
+
+model AnimeSchedule {
+  id           String       @id @default(uuid())
+  animeId      String
+  anime        Anime        @relation(fields: [animeId], references: [id])
+  scheduleType ScheduleType
+
+  @@unique([animeId, scheduleType])
 }

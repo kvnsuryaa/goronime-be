@@ -7,6 +7,7 @@ import { StudioModule } from './master/studio/studio.module';
 import { GenreModule } from './master/genre/genre.module';
 import { CategoryModule } from './master/category/category.module';
 import { UploadsModule } from './uploads/uploads.module';
+import { SchduleModule } from './schdule/schdule.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { UploadsModule } from './uploads/uploads.module';
       isGlobal: true
     }),
     CategoryModule,
-    UploadsModule
+    UploadsModule,
+    SchduleModule
   ],
   controllers: [],
   providers: [],
