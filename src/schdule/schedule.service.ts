@@ -1,17 +1,17 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateSchduleDto } from './dto/create-schdule.dto';
+import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ScheduleType } from '@prisma/client';
 
 @Injectable()
-export class SchduleService {
+export class ScheduleService {
   constructor(private prisma: PrismaService) { }
 
-  async add(createSchduleDto: CreateSchduleDto) {
+  async add(createScheduleDto: CreateScheduleDto) {
     let i = 0
-    const scheduleType = createSchduleDto.scheduleType
-    while (i < createSchduleDto.animes.length) {
-      const animeId = createSchduleDto.animes[i]
+    const scheduleType = createScheduleDto.scheduleType
+    while (i < createScheduleDto.animes.length) {
+      const animeId = createScheduleDto.animes[i]
       await this.prisma.animeSchedule.create({
         data: {
           scheduleType: scheduleType,

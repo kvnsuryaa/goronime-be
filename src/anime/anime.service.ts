@@ -67,12 +67,18 @@ export class AnimeService {
   }
 
   async findAll(query: any) {
-    let { page, limit } = query
+    let { page, limit, search } = query
     page = page || 1
     limit = limit || 10
 
     const filter = {}
     filter['isDeleted'] = false
+    if (search) {
+      filter['title'] = {
+        contains: search,
+        mode: 'insensitive'
+      }
+    }
 
     const offset = page * limit - limit
     const total_data = await this.prisma.anime.count({
