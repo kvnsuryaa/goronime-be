@@ -43,7 +43,9 @@ export class EpisodeService {
 
   async findAll(animeSlug: string) {
     const episodes = await this.prisma.animeEpisode.findMany({
-      include: {
+      select: {
+        id: true,
+        episodeNumber: true,
         anime: {
           select: {
             id: true,
