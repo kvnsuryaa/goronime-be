@@ -7,7 +7,7 @@ import { StudioModule } from './master/studio/studio.module';
 import { GenreModule } from './master/genre/genre.module';
 import { CategoryModule } from './master/category/category.module';
 import { UploadsModule } from './uploads/uploads.module';
-import { SchduleModule } from './schdule/schedule.module';
+import { ScheduleModule } from './schedule/schedule.module';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { SchduleModule } from './schdule/schedule.module';
     }),
     CategoryModule,
     UploadsModule,
-    SchduleModule
+    ScheduleModule
   ],
   controllers: [],
   providers: [],

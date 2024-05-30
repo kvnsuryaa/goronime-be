@@ -67,7 +67,7 @@ export class AnimeService {
   }
 
   async findAll(query: any) {
-    let { page, limit, search } = query
+    let { page, limit, search, res } = query
     page = page || 1
     limit = limit || 10
 
@@ -78,6 +78,14 @@ export class AnimeService {
         contains: search,
         mode: 'insensitive'
       }
+    }
+
+    if (res === 'text') {
+      const res = await this.prisma.$queryRaw`SELECT STRING_AGG(title || '(@)' || slug || '(@)' || poster, '(|)') as all 
+      FROM (
+        SELECT title, slug, poster FROM "Anime" WHERE "isDeleted" = false ORDER BY title ASC
+      ) a;`
+      return res
     }
 
     const offset = page * limit - limit
@@ -238,17 +246,6 @@ export class AnimeService {
     INNER JOIN "Category" ON "Category".id = "Anime"."categoryId"
     WHERE "statusAnime"::text = ${status}
     ORDER BY "latestCreatedAt" DESC LIMIT ${limit} OFFSET ${offset};`
-
-    const data = await this.prisma.animeEpisode.findMany({
-      select: {
-        episodeNumber: true,
-        anime: true
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    })
-
     return res
   }
 }

@@ -32,7 +32,11 @@ export class ScheduleService {
         scheduleType: type
       },
       include: {
-        anime: true
+        anime: {
+          include: {
+            category: true
+          }
+        }
       }
     })
 
