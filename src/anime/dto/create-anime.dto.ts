@@ -7,6 +7,7 @@ export class CreateAnimeDto {
     title: string;
 
     @IsString()
+    @IsOptional()
     alternateTitle?: string;
 
     @IsString()
@@ -36,9 +37,11 @@ export class CreateAnimeDto {
 
     @IsString()
     @IsUUID()
-    studioId: string;
+    @IsOptional()
+    studioId?: string;
 
     @IsArray()
     @IsString({ each: true })
+    @IsOptional()
     genres?: string[];
 }

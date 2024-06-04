@@ -21,14 +21,17 @@ export class AnimeService {
       throw new NotFoundException('Category not found')
     }
 
-    const studio_anime = await this.prisma.studio.findFirst({
-      where: {
-        id: createAnimeDto.studioId
-      }
-    })
+    let studio_anime = null
+    if (createAnimeDto.studioId) {
+      studio_anime = await this.prisma.studio.findFirst({
+        where: {
+          id: createAnimeDto.studioId
+        }
+      })
 
-    if (!category_anime) {
-      throw new NotFoundException('Category not found')
+      if (!studio_anime) {
+        throw new NotFoundException('Studio not found')
+      }
     }
 
     const anime = await this.prisma.anime.create({
@@ -42,26 +45,28 @@ export class AnimeService {
         statusAnime: createAnimeDto.statusAnime,
         totalEpisode: createAnimeDto.totalEpisode,
         categoryId: category_anime.id,
-        studioId: studio_anime.id,
+        studioId: studio_anime ? studio_anime.id : null,
         createdById: user.id,
       }
     })
 
     // insert for anime genre
-    const genres: Array<AnimeGenreDto> = []
-    let i = 0
-    while (i < createAnimeDto.genres.length) {
-      const genreId = createAnimeDto.genres[i]
-      genres.push({
-        genreId: genreId,
-        animeId: anime.id
-      })
-      i++
-    }
+    if (createAnimeDto.genres) {
+      const genres: Array<AnimeGenreDto> = []
+      let i = 0
+      while (i < createAnimeDto.genres.length) {
+        const genreId = createAnimeDto.genres[i]
+        genres.push({
+          genreId: genreId,
+          animeId: anime.id
+        })
+        i++
+      }
 
-    await this.prisma.animeGenre.createMany({
-      data: genres
-    })
+      await this.prisma.animeGenre.createMany({
+        data: genres
+      })
+    }
 
     return anime;
   }

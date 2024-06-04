@@ -94,15 +94,15 @@ model Anime {
   title          String          @db.VarChar(512)
   alternateTitle String?         @db.VarChar(512)
   slug           String          @unique @db.VarChar(512)
-  synopsis       String?         @db.VarChar(1020)
+  synopsis       String?         @db.VarChar(2500)
   poster         String?         @db.Text
   releaseDate    String?
   totalEpisode   Int?            @default(0)
   statusAnime    AnimeStatus
   categoryId     String
   category       Category        @relation(fields: [categoryId], references: [id])
-  studioId       String
-  studio         Studio          @relation(fields: [studioId], references: [id])
+  studioId       String?
+  studio         Studio?         @relation(fields: [studioId], references: [id])
   createdById    String
   createdBy      Users           @relation(fields: [createdById], references: [id])
   createdAt      DateTime        @default(now())
